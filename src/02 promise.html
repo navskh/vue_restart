@@ -1,0 +1,45 @@
+<h1>CallBack</h1>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+
+<script>
+  // Ajax 호출!!
+  function callAjax(){
+    return new Promise(function(resolve, reject){
+    $.ajax({
+      url: 'https://api.hnpwa.com/v0/news/1.json',
+      success: function(data){
+        // 여기서 resolve에 data를 넣어주면 
+        // promise 의 결과로 then에 data를 넘겨주게 됨
+        resolve(data);
+      }
+    });
+
+    });
+  }
+  function fetchData(){
+    //1 
+    var result = [];
+
+    // 2
+    callAjax()
+      .then(function(data){
+        console.log('데이터 호출 결과', data);
+        result = data;
+        console.log(result);
+      });
+
+    // 3
+    console.log('함수 결과', result);
+  }
+
+  fetchData();
+
+  // 실행 순서
+  // 3 > 2
+  // 실행순서는 같으나, callback 지옥에 빠지지 않게 만들어주는 기능이 있음.
+
+</script>

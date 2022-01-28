@@ -1,0 +1,33 @@
+<h1>CallBack</h1>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+
+<script>
+  function fetchData(){
+    //1 
+    var result = [];
+
+    $.ajax({
+      url: 'https://api.hnpwa.com/v0/news/1.json',
+      success: function(data){
+        //2-1
+        console.log('데이터 호출 결과', data);
+        result = data;
+        //2-2
+        console.log(result);
+      }
+    });
+
+    // 3 
+    console.log('함수 결과', result);
+  }
+
+  fetchData();
+
+  // 실행 순서
+  // 3 > 2-1 >  2-2
+
+</script>
