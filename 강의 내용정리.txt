@@ -152,3 +152,85 @@ Vuex는 상태관리도구
   ]),
   위와 같이 사용할 수 있다.
   
+
+22.02.01 (화) 강의 정리.
+- Dynamic Route matching (동적 라우트 매칭)
+  url 에 ?id=(아이디명) 이거로 다음 페이지로 이동할 수 있다.
+
+  라우팅 routes/index.js 에 보면
+
+  {
+    path:'/user/:id',
+    component: UserView,
+  },
+
+  위와 같이 설정하고
+
+  라우팅 링크를 설정할 때 
+  <router-link v-bind:to="`/user/${item.user}`">{{item.user}}</router-link>
+  위와 같이 설정 다시말해 
+  v-bind:to=/user/ + id 
+  의 구조로 설정하면
+
+  해당하는 곳으로 이동했을 때 
+
+  vue 탭의 개발자도구로 들어가면
+  data.$route.params 안에  (여기 객체 값 확인 필요)
+  id 값이 넘어가는 것을 알 수 있다.
+  
+  위에서 어디는 params 에 넘기고
+  어디는 query에 넘김 방법론적인 거 나중에 이 방법 저 방법 다 배울 것
+
+  * 다이나믹 라우팅의 순서
+  1. 라우터 > index.js에 라우터 정보 등록
+  2. 해당 페이지 컴포넌트로 이동했을 때 params Or querys 정보를 다룰 것
+
+- 데이터 fetch 순서 (vuex 쪽이긴한데 오늘 알게 됨)
+  1. vue component 생성
+  2. vuex 를 사용하여 dispatch실행 => store의 actions 로 가게 됨
+  3. 해당 하는 함수 (FETCH_ITEM) 실행
+  4. axios등을 실행하여 데이터 가져옴
+  5. 여기 데이터 mutation으로 옮김 
+  6. mutation에서 state에 셋팅한 정보들을 component에서 사용 가능
+
+- font awsome 페이지 참고
+<link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+
+- html 에 해당하는 content를 가져왔을 때 태그를 인식시켜서 출력시켜줄 경우
+  v-html 을 사용하면 끝
+  <div v-html="fetchedItem.content">
+
+- 라우터 트랜지션
+  라우터에 의해 페이지가 바뀔 때,
+  좀더 스무스하게 바뀔 수 있도록 할 수 있음
+  <transition>
+      <router-view></router-view>
+  </transition>
+
+- 리팩토링
+  구조를 바꿀 것임.
+  공통으로 사용되는 부분을 컴포넌트로 뽑아낼 것임
+  ex) 
+  하나의 글(피드)를 컴포넌트로 만들 수 있음.
+
+  * 일단, style 태그 안에 scoped 속성을 주면 해당 컴포넌트에만 영향을 끼치겠다는 소리임
+
+  컴포넌트 만들어서 사용할 때,
+  명명 규칙의 변화가 됨을 유의할 것.
+  예를들어, ListItem.vue 로 컴포넌트를 생성해서 가져왔으면
+  태그는 list-item으로 생성해야함. 대문자로 구분이 - 로 구분이 되고 소문자로 변경됨.
+
+  핵심은 분기를 어떻게 해줄 것이냐하는 것임.
+  this.$route;
+  에 접근할 수 있음.
+  이 안에 있는 정보, path or name을 통해 분기를 주면 됨
+
+  그 외에는 v-if 를 사용하는 방법 설명함.
+  어떤 애는 있는데 어떤 애는 없으면 이를 판단하여 분기해주면 됨.
+
+- 사용자 컴포넌트 데이터 흐름
+  userView 안에 userProfile 컴포넌트를 가져왔다.
+  이 경우
+  1. userView에서  fetch dispatch하는 부분에서 데이터 가져옴
+  2. 위 데이터를 아래 컴포넌트인 userProfile 에서 사용할 수 있음
+  3. this.$store.state.user 를 통해 사용하면 됨
