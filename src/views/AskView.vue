@@ -1,29 +1,44 @@
 <template>
   <div>
-    <div v-for="user in users" v-bind:key="user" > {{user.title}} </div>
+    <p v-for="ask in ask" v-bind:key="ask">
+      <a :href="ask.url">{{ask.title}}</a>
+      <small>{{ask.time_ago}} by {{ask.user}}</small>
+    </p>
   </div>
 </template>
 
 <script>
-import {fetchAskList} from '../api/index.js';
+import {
+  mapState, 
+  // mapGetters
+  } from 'vuex';
 
 export default {
-  data(){
-    return{
-      users: []
-    }
-  }, 
+  computed:{
+    // 아래 내용은 위에서 변수명을 this.$store.state.ask 를 간략표기방법
 
-  created(){
-    console.log(this);
-    // 여기서 this를 바인딩해줘야 지금 여기 컴포넌트를 가리킬 수 있다.
-    // call back 하고 가르키면 axios.get 을 가르키게 된다.
-    fetchAskList()
-    .then(response =>{
-      this.users = response.data
-      console.log(this);
+    // #4 (getter 배열 표기법)
+    // ...mapGetters([
+    //   'fetchedAsk'
+    // ]),
+
+    // #3 (getter 객체 표기법)
+    // ...mapGetters({
+    //   fetchedAsk : 'fetchedAsk'
+    // })
+
+    // #2 (mapState 사용법)
+    ...mapState({
+      ask: index => index.asks
     })
-    .catch(error => console.log(error))
+
+    // #1 (함수 사용법)
+    // ask(){
+    //   return this.$store.state.ask;
+    // } 
+  },
+  created(){
+    this.$store.dispatch('FETCH_ASK');
   },
 } 
 </script>

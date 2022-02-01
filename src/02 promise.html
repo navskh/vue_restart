@@ -27,13 +27,14 @@
     // 2
     callAjax()
       .then(function(data){
-        console.log('데이터 호출 결과', data);
+        // 이 부분이 두번째로 실행 됨
+        console.log('데이터 호출 결과', data); 
         result = data;
         console.log(result);
       });
 
     // 3
-    console.log('함수 결과', result);
+    console.log('함수 결과', result); // 이 부분이 가장 먼저 실행 됨
   }
 
   fetchData();

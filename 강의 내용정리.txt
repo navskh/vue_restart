@@ -1,0 +1,154 @@
+- Promise 와 resolve
+  콜백 관계에서 Promise가 끝나고 resolve를 통해 data 값을 넘겨주게 되는 것임.
+
+
+- Vuex 간단한 구조도
+before
+  NewsView 에서 API를 적용해서 호출
+
+after 
+  NewsView <- Vuex <- API 
+
+중간에 Vuex 를 사용하여 호출할 예정임.
+컴포넌트의 관리의 의미가 있음
+
+
+Vuex는 상태관리도구
+컴포넌트 간에 데이터 넘겨줄 때 사용
+
+
+- Vuex 를 만들어서 인스턴스를 추가해주면
+  개발자 도구에서 Vue 탭의 두번째 셀렉션으로 Vuex 를 사용할 수 있게 된다.
+
+- Vuex에서의 action상태는 dispatch로 가져올 수 있다.
+
+
+- Vuex에서의 상태에 대하여.
+  Action : 모든 비동기 호출 값을 가져온다.
+  Mutation : 이를 State에 담기 전 상태임. 여기를 거쳐감.
+  State : 최종 바뀔 값.
+  
+  순서는 다음과 같다.
+  Action(API로 부터 값을 받음) 
+  -> mutation (값을 state로 넘겨줌) : 이 과정이 왜 있는지는 강사도 모르고 있음
+  -> state (여기 안의 변수를 내보낼 수 있음)
+  * 이 때, 상태에 따라 데이터 넘겨줄 때 써야하는 용어들이 정해져있음
+  https://vuex.vuejs.org/kr/ 를 참고하고
+  action -> mutation 은 commit
+  vue component에서 action에 접근하여 데이터 가져올때는 dispatch를 사용해야함
+
+  위의 전체 상태 값에 대한 코드를
+  store 에 담아서 export 시켜주면
+  
+  main.js에서 store를 import 시켜줬기 때문에
+  모든 컴포넌트에서 store를 사용할 수 있게 된다.
+  
+  그 다음 원하는 컴포넌트에서 
+  this.$store.dispatch('actions 안의 함수 이름')
+  위와 같이 사용하면 위의 state에 저장한 값에 접근할 수 있게 된다.
+
+- Destructuring (구조 분해 문법)
+  https://joshua1988.github.io/es6-online-book/destructuring.html#%EA%B8%B0%EC%A1%B4-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EC%97%90%EC%84%9C%EC%9D%98-%EA%B5%AC%EC%A1%B0
+  위 페이지에 긴 내용이 담겨있음.
+
+  var arr = [1, 2, 3, 4];
+  var obj = {
+    a: 10,
+    b: 20,
+    c: 30
+  };
+
+  위와 같은 배열, 객체의 선언에서
+
+  var { a, b, c } = obj;
+
+  위를 실행할 시 
+  a, b, c 에 각각 10,20,30 이 들어가게 된다.
+
+
+  자주 사용하는 방법은 아래와 같다.
+  var josh = {
+    language: 'javascript',
+    position: 'front-end',
+    area: 'pangyo',
+    hobby: 'singing',
+    age: '102'
+  };
+
+  var language = josh.language;
+  var position = josh.position;
+  var area = josh.area;
+  var hobby = josh.hobby;
+  var age = josh.age;
+
+  위와 같이 사용하던 것을
+  var { language, position, area, hobby, age } = josh;
+  console.log(language); // javascript
+  console.log(position); // front-end
+  console.log(area); // pangyo
+  console.log(hobby); // singing
+  console.log(age); // 102
+  위와 같이 사용할 수 있다는 것이다.
+
+  vuex를 사용할 때, 
+  context.context 사용시 {commit} 으로 간략하게 사용할 수 있게 된다.
+
+
+- vuejs map 헬퍼에 대하여...
+  * AskView 부분을 보면 주석으로 this.$store.state.ask 를 어떻게하면 간략하게 사용할 것이냐에 대한 내용을 적어두었음.
+
+  그에 대한 설명을 여기에 기록함.
+  #1 함수를 사용함.
+  단순하다. computed : 아래에 메서드를 하나만들어
+  거기서 return this.$store.state.ask 을 넣어주면 끝
+
+  #2 이제부터는 vuex 맵헬퍼 함수를 사용하여 가져올 것이다.
+  2. mapState 사용법 
+  map헬퍼함수를 사용할 때는, ... (spread 구문을 사용하는 듯하다)
+  왜 spread 구문이냐
+  예를 들어 
+  ...mapState([
+    'count'
+  ])
+  위와 같이 사용하였다면.. 
+  state 내의 모든 존재하는 value들을 검색하여
+  그 중에 count 를 가져오겠다는 뜻이다. 
+
+  ...mapState({
+    ask : state => state.ask
+  })
+
+  여기서는 위와 같이 사용하였는데
+  => 인자 안에 state 를 넣으면
+  state의 값은 state 의 모든 값을 다 가져온다.
+  (물론 여기서는 created 될 때, FETCH_ASK 를 호출하였기 때문에
+  다른 값에는 아무 것도 안들어가지만 state.ask 에만 값이 들어가 있게 됨.)
+  결과적으로 위 코드에서
+  ask 라는 프로퍼티 안에
+  state.ask 값을 넣어준 것과 같이 동작한다.
+
+  3. mapGetter(객체 표기법)
+  index.js 안에 
+
+  getters:{
+    fetchedAsk(state){
+      return state.asks;
+    }
+  },
+  위와 같이
+  getters 를 만들어  fetchedAsk 를 추가한다.
+  getters 란 기본적으로 데이터에 접근할 때 발생한다.
+
+  그 때 fetchedAsk 를 발생시켜 state.ask 를 가져갈 수 있도록 해주는 것이다.
+
+    ...mapGetters({
+        ask : 'fetchedAsk'
+    })
+
+  위와 같이 선언하여 index.js 에서 ask 값을 가져온다.
+  혹은 배열형태로..
+  ...mapGetters([
+    'fetchedAsk'
+  ]),
+  위와 같이 사용할 수 있다.
+  
