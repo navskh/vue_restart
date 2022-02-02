@@ -229,8 +229,58 @@ Vuex는 상태관리도구
   어떤 애는 있는데 어떤 애는 없으면 이를 판단하여 분기해주면 됨.
 
 - 사용자 컴포넌트 데이터 흐름
-  userView 안에 userProfile 컴포넌트를 가져왔다.
-  이 경우
-  1. userView에서  fetch dispatch하는 부분에서 데이터 가져옴
-  2. 위 데이터를 아래 컴포넌트인 userProfile 에서 사용할 수 있음
-  3. this.$store.state.user 를 통해 사용하면 됨
+  * 첫번째 방법
+    userView 안에 userProfile 컴포넌트를 가져왔다.
+    이 경우
+    1. userView에서  fetch dispatch하는 부분에서 데이터 가져옴
+    2. 위 데이터를 아래 컴포넌트인 userProfile 에서 사용할 수 있음
+    3. this.$store.state.user 를 통해 사용하면 됨
+
+  * 두번째 방법
+    userView 안에 <user-profile> 태그에
+    <user-profile :info="userInfo"></user-profile>
+    위와 같이 :info 안에 데이터를 넘겨준다. 
+    (물론 userView 안에 computed 속성에 userInfo 값이 있어야한다.)
+    그러면 userProfile 안에는 props 로 info 값을 받을 수 있다.
+
+  * 두가지 방법의 비교
+    직빵으로 가져오는 것과
+    info 로 보내주고 받는 것.
+
+    1번은
+    UserView => Vuex => API 
+    => Vuex => UserProfile 
+    => UserView
+
+    2번은 
+    UserView => Vuex => API 
+    => Vuex => UserView 
+    => UserProfile => UserView
+
+    조금더 Vuex의 구조에 적합하게 만들려면
+    표현하는 부분에 바로 땡기는 것이 간편하게 만든 것이기 때문에
+
+    곧바로 가져가는 1번 방법이 낫고
+
+    그러나 구조적으로 의미를 주고 싶으면 2번으로 사용하는게 낫다.
+  
+- slot 의 사용
+    UserProfile 에서
+    <slot name="username">
+        <!-- 상위 컴포넌트에서 정의할 영역 -->
+    </slot>
+    위와 같이 slot을 뚫어주면
+
+    UserVue 에서 
+    <div slot="username">{{ userInfo.id }}</div>
+    와 같이 사용하면 된다.
+    그러면 해당 위치에 내가 원하는 정보를 그대로 넘겨줄 수 있다.
+
+    언제 사용하는가
+    ex)
+    ItemView 에서는 info.id 값을 넘겨주는데
+    UserView 에서는 info.user 값을 넘겨준다고 하면
+    분기를 만들수도 있겠지만 위와 같이 처리하는게 직관적으로 보기가 좋은듯
+
+    router-link 에 물려서 보내줄 수 있음.
+    
