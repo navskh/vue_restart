@@ -1,3 +1,123 @@
+[router 설계 필요 ]
+
+    news
+    ask
+    jobs
+
+    세개의 페이지가 필요하고
+    이를 url에 맞게 뿌려주면 됨.
+
+    특정 상세 페이지가 따로 있음
+    사용자 정보 페이지 (user view)
+
+
+[vue cli 2 vs vue cli 3]
+- 명령어 
+    - 2.x : vue init '프로젝트 템플릿 이름'  '파일 위치'
+    - 3.x : vue create '프로젝트 이름'
+
+- 웹팩 설정 파일
+    - 2.x : 노출 Y 
+        WEBPACK.config이 밖으로 나와 있음
+        WEBPACK 에다 곧바로 수정하면 되었음
+    - 3.x : 노출 N
+        WEBPACK.config이 숨겨있음
+        webpack 조작할 때 별도의 필요한 부분 추가해줘야함
+
+- 프로젝트 구성
+    - 2.x : 깃헙의 템플릿 다운로드
+    - 3.x : 플러그인 기반으로 기능 추가 
+
+- ES6 이해
+    - 2.x : 필요 없음
+    - 3.x : 필요
+
+[ES lint 해제하는 방법]
+/*eslint-disable*/ 을 올려두면 해당 코드는 적용 x
+
+vue.config.js 
+
+
+
+[vue의 프로젝트 순서]
+1. vue create 로 생성하여 vue cli 3 를 실행하면 프로젝트 생성
+2. 프로젝트 생성 main.js 가 해당 application의 구조도가 됨
+3. router 를 등록하는 방법 
+    1) vue-router 를 설치 (npm install vue-router --save)
+    2) router 폴더 (src아래에 생성) > index.js 생성
+    3) index.js에 url 정보와 components정보를 입력
+    4) routes 를 export 시켜주고 main.js에서 import해줌
+    5) App.vue에서 <router-view>를 추가해주면 router에서 컴포넌트를 해당 태그에 뿌려주는 것을 확인할 수 있음
+
+[태그 새롭게 등록]
+<!--ToolBar 일 때는 tool-bar 로 바꿔서 사용가능-->
+<!--Pascal 케이스는 자동완성 x-->
+<!--케밥 케이스는 자동완성 o 그리고 간략 확인가능-->
+
+[router-link to='url']
+앵커가 박히게 됨. 
+
+
+[api]
+api 를 불러오면 해당 정보들을 배열형태로 받을 수 있음
+
+
+[this]
+vue에서 this를 찍으면 기본적으로 컴포넌트 자체가 찍히게 되는듯하다.
+그러나 axios에서 then 을 처리한 후 this를 찍으면 axios가 찍히게 된다.
+
+this 는 기본은 전역
+그러나 생성자 함수에서는 그 생성자 함수
+비동기 호출 시 this (then 에 나오는 this) 는 undefined이다. (이럴 경우 this binding 해줘야 함)
+그러나 arrow func 일 때 this는 최종 생성자 this 를 가리킴
+- 
+그래서 arrow function 방식을 많이 사용한다.
+this 바인딩 할 필요가 없으므로
+
+[created]
+components 가 생성될 때 생성되는 곳이 created() 이다.
+ES6 에서 
+created : fucntion() {
+
+}
+를 created()로 사용할 수 있음
+
+lifecycle hook이라고 부르고
+이런 것들이
+beforeMount,
+mounted
+등등이 있다.
+
+이와 연관된 내용이 
+- Reactivity in Depth
+(https://vuejs.org/v2/guide/reactivity.html#ad)
+라고 하는 내용이 있음.
+
+나중에 한번 볼 것
+
+[비동기처리, callback, promise]
+- callback
+    종료되는 시점에 실행되는 함수 (함수로 인자를 넘길 수 있으므로 가능함)
+
+    1 fetchData() 실행
+    2 그 안의 result 배열 생성
+    3 ajax 실행 > 데이터 받아옴. 
+    4 console.log 에 그 결과가 찍힘
+
+    이런 순으로 코딩이 되어있는데
+    1>4 순이 아니라
+
+    1,2,4,3 순으로 실행 됨
+    먼저 console.log 를 먼저 처리하고
+    그 다음에 ajax의 처리가 완료됨
+
+    이게 비동기처리의 기본 임
+
+    그러면 console.log를 ajax안에서 실행하면 올바른 순서로 찍힘
+
+    callback hell 에 빠질 수 있음
+
+
 - Promise 와 resolve
   콜백 관계에서 Promise가 끝나고 resolve를 통해 data 값을 넘겨주게 되는 것임.
 
@@ -284,3 +404,127 @@ Vuex는 상태관리도구
 
     router-link 에 물려서 보내줄 수 있음.
     
+- spinner
+  "웹 페이지의 로딩 상태를 나타내는 컴포넌트를 의미합니다."
+  1. Spinner.vue 를 생성한다.
+    걍구글링해서 복붙함.
+  2. props: {
+    loading: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  props 에 loading 값을 설정할 것,
+  3. bus 셋팅
+  "Spinner는 여러 컴포넌트에서 사용할 수 있기 때문에, Event Bus를 이용하는 것이 좋습니다. event bus는 단순히 이벤트를 공유할 수 있도록 하는 bus입니다."
+  bus.js 생성 (단순 vue 만들어서 export 시켜줌)
+
+  4. bus를 사용하여 App.vue 의 created()와 beforeDestroy() 안에서 사용함.
+
+  created(){
+    bus.$on('start:spinner', this.startSpinner);
+    bus.$on('end:spinner', this.endSpinner);
+  },
+  beforeDestroy(){ // 이벤트 등록하고 나면 반드시 종료시켜줘야함.
+    bus.$off('start:spinner', this.startSpinner);
+    bus.$off('end:spinner', this.endSpinner);
+  }
+
+  5. 엘리먼트 created() 에서 페이지 생성 될 때 해당 로딩 화면 보여지도록 수정
+  bus.$emit('start:spinner'); // start:spinner 발생 (이때 부터 로딩값 보여줌)
+    setTimeout(() => { // setTimeout 은 로딩을 인위적으로 보도록 만든 것임 
+      this.$store.dispatch('FETCH_JOBS')  // 데이터받아와서
+      .then(()=>{ 
+        bus.$emit('end:spinner'); // 정상적으로 받아오면 spinner 종료
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }, 1000)
+
+
+- 하이오더 컴포넌트 (HOC)
+  "하이오더 컴포넌트는 컴포넌트의 로직(코드)을 재사용하기 위한 고급기술"
+  위의 spinner를 만든다 하면, 모든 엘리먼트 파일에 해당 동일한 코드를 추가해줘야했다.
+
+  이를 공통 컴포넌트로 만들어서(하이오더 컴포넌트) 언제든 재사용하게 만들겠다는 것이다.
+  
+  1. CreateListView.js
+  이게 하이오더 컴포넌트라 할 수 있음.
+  
+  2. router 쪽에서
+  사용된 component의 갯수가 적어짐.
+  그냥 CreateListView 만 쓰면 됨.
+
+  컴포넌트의 구조가 어떻게 되는가.
+  NewsView  > ListView(hoc로 생상된 컴포넌트) > ListItem
+
+- Mixin 
+  "공통으로 사용하고 있는 로직, 기능들을 재사용하는 방법"
+  하이오더 컴포넌트의 단점은 
+  NewsView  > ListView(hoc로 생상된 컴포넌트) > ListItem
+  
+  Level이 깊어짐.
+  통신에 있어서 불편함이 발생할 수 있음.
+
+  Mixin을 사용하면
+  1) 코드가 깔끔해짐.
+  2) spinner의 효율이 좋아짐.
+
+- 데이터 호출 시점
+    1. 컴포넌트 라이프 사이클 훅
+      - created()
+      인스턴스(컴포넌트)가 생성되자 마자. 호출되는 로직들.
+      data 관찰, computed 속성, methods 접근 가능
+      화면에 mounted 에 접근은 안됨
+
+      * '컴포넌트 생성되자마자' 타이밍이 핵심!
+
+    2. 라우터 네비게이션 가드.
+    https://joshua1988.github.io/web-development/vuejs/vue-router-navigation-guards/
+    위 글 참고
+    router.beforeEach(fucntion (to, from, next){
+      // to: 이동할 url
+      // from : 현재 url
+      // next : to에서 지정한 url로 이동하기 위해 꼭 호출해야하는 함수
+    })
+
+    이런식으로 라우팅 되기전 시점에 호출할 수 있음.
+
+    vue-router 공식 문서 > advanced > 
+    https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
+
+    위 글도 참고
+
+    * 특정 "url로 접근하기 전"에 동작을 정의!
+
+    시점은 라우터 네비게이션 가드가 먼저임.
+
+  * 라이프 사이클 훅의 문제점.
+    해당 내용이 update되기 전에 그 전의 내용을 먼저 보여줬다가 
+    그다음 내용이 뜸.
+
+    왜 그러냐면
+    vuex(store) > state 에서 
+    list라는 데이터를 공유하고 거기에 덮어쓰기를 반복하기 때문임.
+    (news, jobs, ask 따로 쓸 때는 괜찮음)
+
+- 라우터 네비게이션 가드 사용법
+  component: NewsView,
+  beforeEnter: (to, from, next) => {
+    console.log(to);
+    console.log(from);
+    console.log(next);
+    next();
+  },
+
+  beforeEnter 를 사용하면 url 이동하기 전에 동작을 줄 수 있다.
+  여기서 auth 같은걸로 구분해서 if문 걸어서 못가게 만들 수도 있음.
+
+  * 라우터 네비게이션을 사용하게 되면 반드시 그 중간중간에 기다릴 수 있도록 인지시키는 도구가 필요하다.
+  - spinner
+  - progress bar
+  - loading bar
+  등등이 되어야 함!
+
+  

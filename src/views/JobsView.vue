@@ -21,17 +21,16 @@
 </template>
 
 <script>
-import ListItem from '../components/ListItem.vue'
+import ListItem from "../components/ListItem.vue";
+// import bus from "../utils/bus";
+import ListMixin from "../mixins/ListMixin";
 
 export default {
-  components:{
+  components: {
     ListItem,
-  }
-  // created(){
-  //   this.$store.dispatch('FETCH_JOBS');
-  // },
-}
+  },
+  mixins: [ListMixin],
+};
 </script>
 
-<style>
-</style> 
+<style></style>

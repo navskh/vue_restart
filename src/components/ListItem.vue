@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="news-list">
-      <li v-for="item in listItems" v-bind:key="item" class='post'> 
+      <li v-for="(item,idx) in listItems" v-bind:key="idx" class='post'> 
         <!-- 포인트 영역 -->
         <div class="points">
           {{ item.points || 0}}
@@ -37,12 +37,14 @@
 export default {
   computed:{
     listItems(){
-      const name = this.$route.name;
+      // const name = this.$route.name;
 
-      if(name == 'news') return this.$store.state.news;
-      else if(name == 'ask') return this.$store.state.asks;
-      else if(name == 'jobs') return this.$store.state.jobs;
-      else return 0;
+      // if(name == 'news') return this.$store.state.news;
+      // else if(name == 'ask') return this.$store.state.asks;
+      // else if(name == 'jobs') return this.$store.state.jobs;
+      // else return 0;
+
+      return this.$store.state.list;
     }
   },
   created(){

@@ -31,10 +31,15 @@ function fetchItemInfo(itemId){
   return axios.get(`${config.baseUrl}item/${itemId}.json`);
 }
 
+function fetchList(pageName){
+  return axios.get(`${config.baseUrl}${pageName}/1.json`);
+}
+
 export {
   fetchNewsList,
   fetchJobsList,
   fetchAskList,
   fetchUserInfo,
-  fetchItemInfo
+  fetchItemInfo,
+  fetchList,
 }
