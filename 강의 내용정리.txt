@@ -710,3 +710,14 @@ Vuex는 상태관리도구
   위 파일에서 Netlify 에 배포할 때 설정 값임.
 
   위와 같이 추가하면 그 뒤의 route 정보를 가져가서 확인하는듯하다.
+
+- env 파일
+    어플리케이션에 공통으로 접근할 수 있는 변수를 만들겠다는 것임.
+    1) 전역 파일 .env 파일을 만든다.
+    2) APP_TITLE=HELLO 이렇게 만들고
+    3) App.vue 에서 created() 안에     console.log(process.env.APP_TITLE); 을 넣어서 실행
+    => undefined 이 뜬다.
+    4) 원래는 dotenv 라는 패키지 가져와서, 뭐 어쩌구 저쩌구해서 정의해야만 사용할 수 있었음.
+    5) vue cli 3 이상부터 지원하는 기능이 있음. 앞에 VUE_ 를 붙이면 됨.
+    6) console.log(process.env.VUE_APP_TITLE); 를 사용하면 끝!
+    
